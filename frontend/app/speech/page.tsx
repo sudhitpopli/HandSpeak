@@ -35,7 +35,7 @@ export default function Speech() {
                         </div>
                         <nav className="p-footer-nav">
                             <Link href="/#team">About us</Link>
-                            <Link href="/#services">Services</Link>
+                            <Link href="/#use-cases">Use Cases</Link>
                             <Link href="/speech">Speech Platform</Link>
                         </nav>
                         <div className="p-footer-socials">

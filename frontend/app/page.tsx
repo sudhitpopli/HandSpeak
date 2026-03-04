@@ -14,7 +14,7 @@ export default function Home() {
                 </div>
                 <nav className="nav">
                     <Link href="#team">About us</Link>
-                    <Link href="#services">Services</Link>
+                    <Link href="#use-cases">Use Cases</Link>
                     <Link href="/speech">Speech Platform</Link>
                 </nav>
             </header>
@@ -32,52 +32,56 @@ export default function Home() {
                     </div>
                 </section>
 
-                {/* HandSpeak Specific Hardware Services Grid */}
-                <section id="services" className="services container">
+                {/* HandSpeak Specific Hardware Use Cases Grid */}
+                <section id="use-cases" className="services container">
                     <div className="section-title">
-                        <span className="badge">Services</span>
-                        <p>Our core infrastructure enables seamless translation from physical gestures to digital communication.</p>
+                        <span className="badge">Use Cases</span>
+                        <p>Discover how HandSpeak's raw telemetry translation enables real-world applications across completely different industries.</p>
                     </div>
 
                     <div className="services-grid">
-                        {/* Service 1 */}
+                        {/* Use Case 1 */}
                         <div className="card card-grey">
                             <div className="card-content">
-                                <h3 className="bg-lime">Real-time Telemetry<br />Tracking</h3>
-                                <a href="#" className="learn-more"><span className="arrow-dark">↗</span> Learn more</a>
+                                <h3 className="bg-lime" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Speech Impairment<br />Aid</h3>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Translating sign language or custom hand gestures into instant natural audio for non-verbal individuals.</p>
+                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
                             </div>
                             <div className="card-image">
-                                <img src="/images/service_1.png" alt="Telemetry" className="dummy-img-small" />
+                                <img src="/images/service_1.png" alt="Speech Aid" className="dummy-img-small" />
                             </div>
                         </div>
-                        {/* Service 2 */}
+                        {/* Use Case 2 */}
                         <div className="card card-lime">
                             <div className="card-content">
-                                <h3 className="bg-white">Sign Language<br />Syntax Parsing</h3>
-                                <a href="#" className="learn-more"><span className="arrow-dark">↗</span> Learn more</a>
+                                <h3 className="bg-white" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Industrial<br />Teleoperation</h3>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Hands-free control of heavy machinery or drones in environments where voice commands fail.</p>
+                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
                             </div>
                             <div className="card-image">
-                                <img src="/images/service_2.png" alt="Syntax Parsing" className="dummy-img-small" />
+                                <img src="/images/service_2.png" alt="Industrial Teleoperation" className="dummy-img-small" />
                             </div>
                         </div>
-                        {/* Service 3 */}
+                        {/* Use Case 3 */}
                         <div className="card card-dark text-white">
                             <div className="card-content">
-                                <h3 className="bg-white">Accessibility Device<br />Integration</h3>
-                                <a href="#" className="learn-more text-white"><span className="arrow-white">↗</span> Learn more</a>
+                                <h3 className="bg-white" style={{ fontSize: '1.5rem', lineHeight: '1.3', color: 'var(--p-dark)' }}>Physical Therapy<br />Monitoring</h3>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', color: 'var(--p-white)' }}>Providing doctors with precise kinematic data to track finger mobility and tremor reduction.</p>
+                                <a href="#" className="learn-more text-white" style={{ marginTop: 'auto' }}><span className="arrow-white">↗</span> Learn more</a>
                             </div>
                             <div className="card-image">
-                                <img src="/images/service_3.png" alt="Accessibility Integration" className="dummy-img-small" />
+                                <img src="/images/service_3.png" alt="Physical Therapy" className="dummy-img-small" />
                             </div>
                         </div>
-                        {/* Service 4 */}
+                        {/* Use Case 4 */}
                         <div className="card card-grey">
                             <div className="card-content">
-                                <h3 className="bg-lime">Microcontroller<br />Optimization</h3>
-                                <a href="#" className="learn-more"><span className="arrow-dark">↗</span> Learn more</a>
+                                <h3 className="bg-lime" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Immersive VR/AR<br />Interaction</h3>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Replacing clunky controllers with natural finger/wrist movements for seamless spatial navigation.</p>
+                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
                             </div>
                             <div className="card-image">
-                                <img src="/images/service_4.png" alt="Microcontroller Optimization" className="dummy-img-small" />
+                                <img src="/images/service_4.png" alt="VR Interaction" className="dummy-img-small" />
                             </div>
                         </div>
                     </div>
@@ -134,7 +138,7 @@ export default function Home() {
                         </div>
                         <nav className="p-footer-nav">
                             <Link href="/#team">About us</Link>
-                            <Link href="/#services">Services</Link>
+                            <Link href="/#use-cases">Use Cases</Link>
                             <Link href="/speech">Speech Platform</Link>
                         </nav>
                         <div className="p-footer-socials">

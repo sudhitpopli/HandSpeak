@@ -52,7 +52,7 @@ void loop() {
   json += "\"accel\":[" + String(a.acceleration.x) + "," + String(a.acceleration.y) + "," + String(a.acceleration.z) + "],";
   json += "\"gyro\":[" + String(g.gyro.x) + "," + String(g.gyro.y) + "," + String(g.gyro.z) + "]";
   json += "}";
-
+  Serial.println(json);
   // 4. Send the POST Request to the Server
   if (WiFi.status() == WL_CONNECTED) {
     WiFiClient client;
