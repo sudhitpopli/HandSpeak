@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { FaLinkedinIn, FaWhatsapp, FaSignLanguage, FaRobot, FaHeartbeat, FaVrCardboard } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
 
@@ -8,7 +9,7 @@ export default function Home() {
             {/* Header Navigation */}
             <header className="header container">
                 <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src="/images/handspeak_logo.png" alt="HandSpeak Logo" style={{ height: '40px', marginRight: '10px' }} className="dummy-img-logo" />
+                    <Image src="/images/handspeak_logo.png" alt="HandSpeak Logo" width={200} height={200} style={{ height: '40px', width: 'auto', marginRight: '10px' }} className="dummy-img-logo" quality={process.env.NODE_ENV === 'development' ? 100 : 50} />
                     <span className="logo-icon">✨</span>
                     <span className="logo-text">HandSpeak</span>
                 </div>
@@ -28,7 +29,7 @@ export default function Home() {
                         <Link href="/speech" className="btn btn-dark">Start Speaking Suite</Link>
                     </div>
                     <div className="hero-image">
-                        <img src="/images/hero_placeholder.png" alt="Hero Illustration" className="dummy-img" />
+                        <Image src="/images/hero_placeholder.png" alt="Hero Illustration" width={1000} height={800} style={{ width: '100%', height: 'auto', display: 'block' }} className="dummy-img" quality={process.env.NODE_ENV === 'development' ? 100 : 50} priority />
                     </div>
                 </section>
 

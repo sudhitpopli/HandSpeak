@@ -15,7 +15,7 @@ export default function LiveTranslationPanel() {
     const [isCalibrated, setIsCalibrated] = useState(false);
     const [isCalibrating, setIsCalibrating] = useState(false);
 
-    const BACKEND_URL = 'http://localhost:8000';
+    const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
     // Poll for status and translations
     useEffect(() => {
@@ -85,40 +85,19 @@ export default function LiveTranslationPanel() {
         }
     };
 
-    // Auto-play TTS when a new word is added
+    // Auto-play local audio when a new word is added
     useEffect(() => {
         if (autoPlay && words.length > 0) {
             const latestWord = words[words.length - 1];
-            playTTS(latestWord);
+            const safeWord = latestWord.trim().toLowerCase().replace(/ /g, '_');
+            const audioUrl = `/audio_files/${safeWord}.wav`;
+
+            if (audioRef.current) {
+                audioRef.current.src = audioUrl;
+                audioRef.current.play().catch(e => console.error(`[DEBUG] Auto-play DOM Exception for ${latestWord}:`, e));
+            }
         }
     }, [words, autoPlay]);
-
-    const playTTS = async (textToSpeak: string) => {
-        if (!textToSpeak) return;
-
-        setIsLoading(true);
-        try {
-            const res = await fetch(`${BACKEND_URL}/api/tts`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: textToSpeak }),
-            });
-
-            if (!res.ok) {
-                throw new Error('Failed to fetch TTS audio');
-            }
-
-            const data = await res.json();
-            if (data.audio_url && audioRef.current) {
-                audioRef.current.src = data.audio_url;
-                await audioRef.current.play();
-            }
-        } catch (error) {
-            console.error('TTS Error:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const playFullSentence = async () => {
         if (words.length > 0) {
@@ -128,37 +107,25 @@ export default function LiveTranslationPanel() {
                 for (const word of words) {
                     console.log(`[DEBUG] Fetching TTS audio for word: '${word}'`);
                     await new Promise<void>((resolve) => {
-                        fetch(`${BACKEND_URL}/api/tts`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ text: word }),
-                        })
-                            .then(res => {
-                                if (!res.ok) throw new Error(`Failed to fetch local TTS file for '${word}'`);
-                                return res.json();
-                            })
-                            .then(data => {
-                                if (data.audio_url && audioRef.current) {
-                                    console.log(`[DEBUG] Audio URL resolved for '${word}': ${data.audio_url} - Playing now.`);
-                                    audioRef.current.src = data.audio_url;
-                                    audioRef.current.onended = () => resolve();
-                                    audioRef.current.onerror = () => {
-                                        console.error(`[DEBUG] Audio Element Error on playback for: ${word}`);
-                                        resolve(); // Skip missing files safely
-                                    };
-                                    audioRef.current.play().catch((e) => {
-                                        console.error(`[DEBUG] DOM Exception preventing playback for ${word}:`, e);
-                                        resolve();
-                                    });
-                                } else {
-                                    console.warn(`[DEBUG] No valid audio URL returned for '${word}'.`);
-                                    resolve();
-                                }
-                            })
-                            .catch((err) => {
-                                console.error('[DEBUG] TTS sequential loop caught error:', err);
-                                resolve(); // Continue playback even if one file is missing
+                        const safeWord = word.trim().toLowerCase().replace(/ /g, '_');
+                        const audioUrl = `/audio_files/${safeWord}.wav`;
+                        console.log(`[DEBUG] Playing local frontend audio for '${word}': ${audioUrl}`);
+
+                        if (audioRef.current) {
+                            audioRef.current.src = audioUrl;
+                            audioRef.current.onended = () => resolve();
+                            audioRef.current.onerror = () => {
+                                console.error(`[DEBUG] Audio Element Error on playback for: ${word} (File not found at ${audioUrl})`);
+                                resolve(); // Skip missing files safely
+                            };
+                            audioRef.current.play().catch((e) => {
+                                console.error(`[DEBUG] DOM Exception preventing playback for ${word}:`, e);
+                                resolve();
                             });
+                        } else {
+                            console.warn(`[DEBUG] No valid audio URL returned for '${word}'.`);
+                            resolve();
+                        }
                     });
 
                     // Add a tiny natural pause between local audio files

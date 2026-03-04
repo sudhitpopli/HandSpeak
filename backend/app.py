@@ -3,24 +3,19 @@ from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
-
 app = FastAPI(title="HandSpeak API", description="Backend for translating HandSpeak sensor data and serving local TTS audio")
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
 
 # Allow CORS so the frontend can communicate with this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=[frontend_url, "http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Ensure the audio directory exists
-AUDIO_DIR = "audio_files"
-os.makedirs(AUDIO_DIR, exist_ok=True)
-
-# Mount the static files directory so the frontend can access the MP3 files via HTTP
-app.mount("/audio", StaticFiles(directory=AUDIO_DIR), name="audio")
+# Audio files are now served directly by the frontend
 
 import math
 
@@ -39,8 +34,6 @@ class SensorData(BaseModel):
     accel: list[float]
     gyro: list[float]
     
-class TTSRequest(BaseModel):
-    text: str
 
 @app.post("/api/calibrate")
 async def start_calibration():
@@ -176,27 +169,3 @@ async def get_latest_translation():
     return {"text": latest_translation}
 
 
-@app.post("/api/tts")
-async def get_local_audio(req: TTSRequest):
-    """
-    Endpoint that maps a text string to a local audio file and returns its HTTP URL.
-    """
-    if not req.text:
-        raise HTTPException(status_code=400, detail="Text cannot be empty.")
-
-    # Create a safe filename, e.g., "Thank You" -> "thank_you"
-    safe_filename = "".join([c if c.isalnum() else "_" for c in req.text.strip().lower()])
-    
-    # Try multiple formats if you wish, defaulting to mp3
-    file_path_mp3 = os.path.join(AUDIO_DIR, f"{safe_filename}.mp3")
-    file_path_wav = os.path.join(AUDIO_DIR, f"{safe_filename}.wav")
-
-    # Check if the file exists in the directory
-    if os.path.exists(file_path_mp3):
-        return {"audio_url": f"http://localhost:8000/audio/{safe_filename}.mp3"}
-    elif os.path.exists(file_path_wav):
-         return {"audio_url": f"http://localhost:8000/audio/{safe_filename}.wav"}
-    else:
-        # Missing file handler
-        error_msg = f"Audio file missing! Please add either '{safe_filename}.mp3' or '{safe_filename}.wav' into backend/{AUDIO_DIR}/ to play audio for this word."
-        raise HTTPException(status_code=404, detail=error_msg)
