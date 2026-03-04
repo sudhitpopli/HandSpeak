@@ -7,8 +7,9 @@ export default function Speech() {
     return (
         <div className="container">
             <header className="header">
-                <div className="logo">
-                    <span className="logo-icon">✨</span> <span className="logo-text">HandSpeak</span>
+                <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
+                    <img src="/images/handspeak_logo.png" alt="HandSpeak Logo" style={{ height: '40px', marginRight: '10px' }} className="dummy-img-logo" />
+                    <span className="logo-text">HandSpeak</span>
                 </div>
                 <nav className="nav">
                     <Link href="/">Back to Home</Link>
@@ -31,7 +32,7 @@ export default function Speech() {
                 <div className="p-footer-box">
                     <div className="p-footer-top">
                         <div className="p-footer-logo">
-                            <span className="logo-icon">✨</span> HandSpeak
+                            HandSpeak
                         </div>
                         <nav className="p-footer-nav">
                             <Link href="/#team">About us</Link>

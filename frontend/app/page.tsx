@@ -9,8 +9,7 @@ export default function Home() {
             {/* Header Navigation */}
             <header className="header container">
                 <div className="logo" style={{ display: 'flex', alignItems: 'center' }}>
-                    <Image src="/images/handspeak_logo.png" alt="HandSpeak Logo" width={200} height={200} style={{ height: '40px', width: 'auto', marginRight: '10px' }} className="dummy-img-logo" quality={process.env.NODE_ENV === 'development' ? 100 : 50} />
-                    <span className="logo-icon">✨</span>
+                    <Image src="/images/handspeak_logo.png" alt="HandSpeak Logo" width={200} height={200} style={{ height: '40px', width: 'auto', marginRight: '10px' }} className="dummy-img-logo" unoptimized={true} />
                     <span className="logo-text">HandSpeak</span>
                 </div>
                 <nav className="nav">
@@ -135,7 +134,7 @@ export default function Home() {
                 <div className="p-footer-box">
                     <div className="p-footer-top">
                         <div className="p-footer-logo">
-                            <span className="logo-icon">✨</span> HandSpeak
+                            HandSpeak
                         </div>
                         <nav className="p-footer-nav">
                             <Link href="/#team">About us</Link>
