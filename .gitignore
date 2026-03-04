@@ -1,0 +1,24 @@
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.env/
+
+# Node
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Misc
+.DS_Store
+*.pem
