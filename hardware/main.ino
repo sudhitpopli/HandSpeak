@@ -54,13 +54,17 @@ void loop() {
   json += "}";
   Serial.println(json);
   // 4. Send the POST Request to the Server
-  if (WiFi.status() == WL_CONNECTED) {
+    if (WiFi.status() == WL_CONNECTED) {
     WiFiClient client;
     HTTPClient http;
     
+    Serial.print("[DEBUG] Attempting to POST to backend at: ");
+    Serial.println(serverUrl);
+
     http.begin(client, serverUrl);
     http.addHeader("Content-Type", "application/json"); // Tells the server we are sending JSON
     
+    Serial.println("[DEBUG] Transmitting payload...");
     int httpResponseCode = http.POST(json); // The moment of transmission
     
     if (httpResponseCode > 0) {

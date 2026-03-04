@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { FaLinkedinIn, FaWhatsapp } from 'react-icons/fa';
+import { FaLinkedinIn, FaWhatsapp, FaSignLanguage, FaRobot, FaHeartbeat, FaVrCardboard } from 'react-icons/fa';
 import { SiGmail } from 'react-icons/si';
 
 export default function Home() {
@@ -44,44 +44,40 @@ export default function Home() {
                         <div className="card card-grey">
                             <div className="card-content">
                                 <h3 className="bg-lime" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Speech Impairment<br />Aid</h3>
-                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Translating sign language or custom hand gestures into instant natural audio for non-verbal individuals.</p>
-                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', maxWidth: '300px' }}>Translating sign language or custom hand gestures into instant natural audio for non-verbal individuals.</p>
                             </div>
-                            <div className="card-image">
-                                <img src="/images/service_1.png" alt="Speech Aid" className="dummy-img-small" />
+                            <div className="card-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px' }}>
+                                <FaSignLanguage style={{ fontSize: '140px', color: 'var(--p-dark)', opacity: 0.9 }} />
                             </div>
                         </div>
                         {/* Use Case 2 */}
                         <div className="card card-lime">
                             <div className="card-content">
                                 <h3 className="bg-white" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Industrial<br />Teleoperation</h3>
-                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Hands-free control of heavy machinery or drones in environments where voice commands fail.</p>
-                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', maxWidth: '300px' }}>Hands-free control of heavy machinery or drones in environments where voice commands fail.</p>
                             </div>
-                            <div className="card-image">
-                                <img src="/images/service_2.png" alt="Industrial Teleoperation" className="dummy-img-small" />
+                            <div className="card-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px' }}>
+                                <FaRobot style={{ fontSize: '140px', color: 'var(--p-dark)', opacity: 0.9 }} />
                             </div>
                         </div>
                         {/* Use Case 3 */}
                         <div className="card card-dark text-white">
                             <div className="card-content">
                                 <h3 className="bg-white" style={{ fontSize: '1.5rem', lineHeight: '1.3', color: 'var(--p-dark)' }}>Physical Therapy<br />Monitoring</h3>
-                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', color: 'var(--p-white)' }}>Providing doctors with precise kinematic data to track finger mobility and tremor reduction.</p>
-                                <a href="#" className="learn-more text-white" style={{ marginTop: 'auto' }}><span className="arrow-white">↗</span> Learn more</a>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', color: 'var(--p-white)', maxWidth: '300px' }}>Providing doctors with precise kinematic data to track finger mobility and tremor reduction.</p>
                             </div>
-                            <div className="card-image">
-                                <img src="/images/service_3.png" alt="Physical Therapy" className="dummy-img-small" />
+                            <div className="card-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px' }}>
+                                <FaHeartbeat style={{ fontSize: '140px', color: 'var(--p-lime)', opacity: 0.9 }} />
                             </div>
                         </div>
                         {/* Use Case 4 */}
                         <div className="card card-grey">
                             <div className="card-content">
                                 <h3 className="bg-lime" style={{ fontSize: '1.5rem', lineHeight: '1.3' }}>Immersive VR/AR<br />Interaction</h3>
-                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5' }}>Replacing clunky controllers with natural finger/wrist movements for seamless spatial navigation.</p>
-                                <a href="#" className="learn-more" style={{ marginTop: 'auto' }}><span className="arrow-dark">↗</span> Learn more</a>
+                                <p style={{ marginTop: '15px', fontSize: '1rem', lineHeight: '1.5', maxWidth: '300px' }}>Replacing clunky controllers with natural finger/wrist movements for seamless spatial navigation.</p>
                             </div>
-                            <div className="card-image">
-                                <img src="/images/service_4.png" alt="VR Interaction" className="dummy-img-small" />
+                            <div className="card-image" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', minHeight: '200px' }}>
+                                <FaVrCardboard style={{ fontSize: '140px', color: 'var(--p-dark)', opacity: 0.9 }} />
                             </div>
                         </div>
                     </div>
@@ -101,10 +97,12 @@ export default function Home() {
                                     <img src="/images/team_1.png" alt="Leader One" className="avatar-img" />
                                 </div>
                                 <div className="info">
-                                    <h4>Leader One</h4>
+                                    <h4>Sudhit Popli</h4>
                                     <p>Hardware Engineer</p>
                                 </div>
-                                <div className="linkedin-badge">in</div>
+                                <a href="https://www.linkedin.com/in/sudhit-popli-a2a9731ab?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BBdhKNeT%2BQMiGbFQpStx5pQ%3D%3D" target="_blank" rel="noreferrer" title="LinkedIn">
+                                    <div className="linkedin-badge">in</div>
+                                </a>
                             </div>
                             <div className="team-bottom">
                                 <p>Specializes in ESP Wi-Fi sensor integration, battery optimization, and state management.</p>
@@ -116,10 +114,12 @@ export default function Home() {
                                     <img src="/images/team_2.png" alt="Leader Two" className="avatar-img" />
                                 </div>
                                 <div className="info">
-                                    <h4>Leader Two</h4>
+                                    <h4>Aaryan Rathore</h4>
                                     <p>Systems Integration</p>
                                 </div>
-                                <div className="linkedin-badge">in</div>
+                                <a href="https://www.linkedin.com/in/aaryan-rathore-1845b631b?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" rel="noreferrer" title="LinkedIn">
+                                    <div className="linkedin-badge">in</div>
+                                </a>
                             </div>
                             <div className="team-bottom">
                                 <p>Expert in real-time embedded systems, C++ architecture, and peripheral interfacing.</p>

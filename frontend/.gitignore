@@ -32,7 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 /backend/.env
-
+/backend/venv
+/backend/__pycache__
 # vercel
 .vercel
 

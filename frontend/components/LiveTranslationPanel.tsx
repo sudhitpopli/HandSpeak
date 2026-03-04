@@ -25,6 +25,12 @@ export default function LiveTranslationPanel() {
                 const statusRes = await fetch(`${BACKEND_URL}/api/status`);
                 if (statusRes.ok) {
                     const statusData = await statusRes.json();
+                    if (hardwareConnected !== statusData.hardware_connected) {
+                        console.log(`[DEBUG] Hardware Connection State Changed: ${statusData.hardware_connected}`);
+                    }
+                    if (isCalibrated !== statusData.is_calibrated) {
+                        console.log(`[DEBUG] Hardware Calibration State Changed: ${statusData.is_calibrated}`);
+                    }
                     setHardwareConnected(statusData.hardware_connected);
                     setIsCalibrated(statusData.is_calibrated);
                 }
@@ -35,6 +41,7 @@ export default function LiveTranslationPanel() {
                     const transData = await transRes.json();
                     const newWord = transData.text?.trim(); // use 'text' as returned from backend
                     if (newWord && newWord !== "Awaiting connection..." && newWord !== lastWordRef.current) {
+                        console.log(`[DEBUG] New Valid Translation Received: Pushing '${newWord}' to UI state.`);
                         setWords(prev => [...prev, newWord]);
                         lastWordRef.current = newWord;
                         // Trigger pulse animation
@@ -52,25 +59,29 @@ export default function LiveTranslationPanel() {
     }, []);
 
     const handleCalibrate = async () => {
+        console.log('[DEBUG] User triggered Calibration Button. Setting Backend UI lock.');
         setIsCalibrating(true);
         try {
-            await fetch(`${BACKEND_URL}/api/calibrate`, {
+            const res = await fetch(`${BACKEND_URL}/api/calibrate`, {
                 method: 'POST'
             });
+            console.log(`[DEBUG] /api/calibrate Response Status: ${res.status}`);
             alert(`Ready to set hardware baseline. Please hold your hand completely flat and still in a resting state to calibrate the offsets.`);
         } catch (error) {
-            console.error('Calibration Error:', error);
+            console.error('[DEBUG] Calibration FETCH Error:', error);
         } finally {
             setIsCalibrating(false);
         }
     };
 
     const handleReset = async () => {
+        console.log('[DEBUG] User triggered Reset Sequence.');
         try {
-            await fetch(`${BACKEND_URL}/api/reset`, { method: 'POST' });
+            const res = await fetch(`${BACKEND_URL}/api/reset`, { method: 'POST' });
+            console.log(`[DEBUG] /api/reset Response Status: ${res.status}`);
             setWords([]);
         } catch (error) {
-            console.error('Reset Error:', error);
+            console.error('[DEBUG] Reset Error:', error);
         }
     };
 
@@ -111,9 +122,11 @@ export default function LiveTranslationPanel() {
 
     const playFullSentence = async () => {
         if (words.length > 0) {
+            console.log(`[DEBUG] Beginning sequential audio fetch for ${words.length} words:`, words);
             setIsLoading(true);
             try {
                 for (const word of words) {
+                    console.log(`[DEBUG] Fetching TTS audio for word: '${word}'`);
                     await new Promise<void>((resolve) => {
                         fetch(`${BACKEND_URL}/api/tts`, {
                             method: 'POST',
@@ -126,16 +139,24 @@ export default function LiveTranslationPanel() {
                             })
                             .then(data => {
                                 if (data.audio_url && audioRef.current) {
+                                    console.log(`[DEBUG] Audio URL resolved for '${word}': ${data.audio_url} - Playing now.`);
                                     audioRef.current.src = data.audio_url;
                                     audioRef.current.onended = () => resolve();
-                                    audioRef.current.onerror = () => resolve(); // Skip missing files safely
-                                    audioRef.current.play().catch(() => resolve());
+                                    audioRef.current.onerror = () => {
+                                        console.error(`[DEBUG] Audio Element Error on playback for: ${word}`);
+                                        resolve(); // Skip missing files safely
+                                    };
+                                    audioRef.current.play().catch((e) => {
+                                        console.error(`[DEBUG] DOM Exception preventing playback for ${word}:`, e);
+                                        resolve();
+                                    });
                                 } else {
+                                    console.warn(`[DEBUG] No valid audio URL returned for '${word}'.`);
                                     resolve();
                                 }
                             })
                             .catch((err) => {
-                                console.error(err);
+                                console.error('[DEBUG] TTS sequential loop caught error:', err);
                                 resolve(); // Continue playback even if one file is missing
                             });
                     });
@@ -143,6 +164,7 @@ export default function LiveTranslationPanel() {
                     // Add a tiny natural pause between local audio files
                     await new Promise(r => setTimeout(r, 300));
                 }
+                console.log("[DEBUG] Sequential Audio Playback Completed.");
             } finally {
                 setIsLoading(false);
             }

@@ -50,6 +50,7 @@ async def start_calibration():
     """
     global is_calibrating
     is_calibrating = True
+    print("\n[DEBUG] /api/calibrate hit -> Backend is now awaiting the next hardware payload to set the baseline.")
     return {"status": "success", "message": "Waiting for next sensor reading to set hardware baseline."}
 
 @app.get("/api/status")
@@ -68,6 +69,8 @@ async def reset_backend_state():
     Utility endpoint to reset the server memory so you don't have to restart the python terminal locally.
     """
     global hardware_connected, baseline_data, is_calibrating, latest_translation
+    
+    print("\n[DEBUG] /api/reset hit -> Wiping all server memory states.")
     hardware_connected = False
     baseline_data = None
     is_calibrating = False
@@ -87,20 +90,32 @@ def predict_from_baseline(data: SensorData, baseline: dict) -> str:
     ay_diff = data.accel[1] - baseline["accel"][1]
     az_diff = data.accel[2] - baseline["accel"][2]
     
-    # Mathematical Threshold Predefined Rule-Set
-    # Adjust these hardcoded values when you test with the real glove!
-    if idx_diff > 150:
-        return "Good Morning" # e.g. Index Finger curled
-    elif ax_diff > 4.0:
-        return "How Are You"   # e.g. Hand sweeping up
-    elif ax_diff < -4.0:
-        return "Welcome To Our Shop"    # e.g. Hand sweeping down
-    elif ay_diff > 4.0:
-        return "Here Is Your Bill"
-    elif az_diff > 4.0:
-        return "Visit Us Again"
+    # Detect Finger Flex (Value drops by ~26 when bent)
+    is_bent = idx_diff < -15
+    
+    print(f"   [Prediction Logic] Offsets -> idx_diff: {idx_diff:.2f}, ax_diff: {ax_diff:.2f}, is_bent: {is_bent}")
+    
+    # Orientation 1: Downward (Resting Baseline ~ 0 offset)
+    if ax_diff > -5.0:
+        if is_bent:
+            return "Welcome To Our Shop"
+        else:
+            return "Good Morning"
+            
+    # Orientation 2: Upward (ax drops massively by ~ -18.6)
+    elif ax_diff < -12.0:
+        if is_bent:
+            return "Here Is Your Bill"
+        else:
+            return "How Are You"
+            
+    # Orientation 3: Horizontal (ax drops by ~ -8.8, az drops by -7.8)
+    elif ax_diff <= -5.0 and ax_diff >= -12.0:
+        if is_bent:
+            return "Thank You"
+        else:
+            return "Visit Us Again"
         
-    # No major deviations detected
     return None
 
 @app.post("/api/sensor")
@@ -110,12 +125,17 @@ async def receive_sensor_data(data: SensorData):
     """
     global latest_translation, is_calibrating, baseline_data, hardware_connected
     
-    hardware_connected = True # First packet confirms physical hardware exists
+    if not hardware_connected:
+        print("\n[DEBUG] PHYSICAL HARDWARE CONNECTION ESTABLISHED!")
+        hardware_connected = True # First packet confirms physical hardware exists
+        
+    print(f"\n[DEBUG] POST /api/sensor -> Raw Payload Received: flex:{data.index}, accel:[{data.accel[0]:.2f}, {data.accel[1]:.2f}, {data.accel[2]:.2f}], gyro:[{data.gyro[0]:.2f}, {data.gyro[1]:.2f}, {data.gyro[2]:.2f}]")
     
     if is_calibrating:
         # Save the single raw telemetry baseline snapshot
         baseline_data = {"index": data.index, "accel": data.accel, "gyro": data.gyro}
         is_calibrating = False
+        print(f"[DEBUG] Baseline Locked In! Saved configuration -> {baseline_data}")
         return {
             "status": "success",
             "message": "Successfully set baseline calibration from hardware.",
@@ -123,6 +143,7 @@ async def receive_sensor_data(data: SensorData):
         }
         
     if not baseline_data:
+         print("[DEBUG] Payload ignored -> Server is waiting for the user to perform baseline calibration.")
          return {
             "status": "waiting",
             "message": "Waiting for single baseline calibration. Please hit the Calibrate button.",
@@ -134,6 +155,7 @@ async def receive_sensor_data(data: SensorData):
     
     if prediction:
          if latest_translation != prediction:
+              print(f"[DEBUG] Valid Gesture Detected! State updated from '{latest_translation}' to '{prediction}'")
               latest_translation = prediction
          msg = f"Predicted offset gesture: {prediction}"
     else:
