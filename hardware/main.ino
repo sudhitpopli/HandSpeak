@@ -9,7 +9,7 @@ const char* ssid = "YOUR_WIFI_SSID";         // Your home WiFi name
 const char* password = "YOUR_WIFI_PASSWORD"; // Your home WiFi password
 // IMPORTANT: Put your PC's local IPv4 address here. 
 // Do NOT use localhost/127.0.0.1 on the ESP8266, use your PC's machine IP on the local network.
-const char* serverUrl = "http://192.168.1.XX:8000/api/sensor"; 
+const char* serverUrl = "https://handspeak-hjzv.onrender.com/api/sensor"; 
 
 const int FLEX_PIN = A0;
 
@@ -29,7 +29,7 @@ void setup() {
   Serial.print("ESP8266 IP Address: ");
   Serial.println(WiFi.localIP());
 
-  // Initialize MPU6050
+  wire.begin(D1, D2); // SDA, SCL pins for MPU6050
   if (!mpu.begin()) { 
     Serial.println("MPU6050 Fail! Check D1/D2 wiring."); 
     while (1); 
